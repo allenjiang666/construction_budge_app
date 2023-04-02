@@ -60,7 +60,7 @@ with raw_tab:
         data.columns = data.iloc[2,:]
         data = data[pd.to_numeric(data.index, errors='coerce').notnull()][['项目编码','项目名称\n项目特征','计量单位','工程数量' ]]
         data = data.rename(columns = {'项目名称\n项目特征':'项目特征'})
-            st.dataframe(data,use_container_width=True, height=450)
+        st.dataframe(data,use_container_width=True, height=450)
         # except:
         #     st.warning('文件格式不符，请检查后刷新页面重新上传', icon="⚠️")
 
