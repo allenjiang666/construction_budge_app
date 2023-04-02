@@ -1,7 +1,7 @@
 import streamlit as st
 from io import BytesIO
 import pandas as pd
-
+import plotly.express as px
 
 st.set_page_config(
     layout="wide",
@@ -71,7 +71,15 @@ with processed_tab:
         processed[['项目总称','具体材料']] = processed['项目'].apply(split_material)
         processed['位置'] = processed['项目总称'].apply(split_location)
         result = processed.groupby([category])['工程数量'].agg('sum').to_frame()
-        st.dataframe(result,height=450,use_container_width=True)
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            fig = px.bar(result.reset_index(), x=category, y='工程数量')
+            fig.update_xaxes(tickangle=90)
+            st.plotly_chart(fig, use_container_width=True)
+        with col2:
+            st.dataframe(result,height=450,use_container_width=True)
+            
         
         all_result =processed.groupby(['位置','项目总称','具体材料','项目特征'])['工程数量'].agg('sum').to_frame()
         
@@ -80,6 +88,5 @@ with processed_tab:
         st.download_button(
             label="下载汇总数据",
             data=output,
-            file_name='汇总.xlsx',
-            
+            file_name='汇总.xlsx',          
         )
