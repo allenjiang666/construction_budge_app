@@ -66,27 +66,30 @@ with raw_tab:
 
 with processed_tab:
     if file_binary:
-        processed = data.copy()
-        processed['项目'] = processed['项目特征'].apply(split_item)
-        processed[['项目总称','具体材料']] = processed['项目'].apply(split_material)
-        processed['位置'] = processed['项目总称'].apply(split_location)
-        result = processed.groupby([category])['工程数量'].agg('sum').to_frame()
-        
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            fig = px.bar(result.reset_index(), x=category, y='工程数量')
-            fig.update_xaxes(tickangle=90)
-            st.plotly_chart(fig, use_container_width=True)
-        with col2:
-            st.dataframe(result,height=450,use_container_width=True)
-            
-        
-        all_result =processed.groupby(['位置','项目总称','具体材料','项目特征'])['工程数量'].agg('sum').to_frame()
-        
-        output = BytesIO()
-        all_result.to_excel(output)
-        st.download_button(
-            label="下载汇总数据",
-            data=output,
-            file_name='汇总.xlsx',          
-        )
+        try:
+            processed = data.copy()
+            processed['项目'] = processed['项目特征'].apply(split_item)
+            processed[['项目总称','具体材料']] = processed['项目'].apply(split_material)
+            processed['位置'] = processed['项目总称'].apply(split_location)
+            result = processed.groupby([category])['工程数量'].agg('sum').to_frame()
+
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                fig = px.bar(result.reset_index(), x=category, y='工程数量')
+                fig.update_xaxes(tickangle=90)
+                st.plotly_chart(fig, use_container_width=True)
+            with col2:
+                st.dataframe(result,height=450,use_container_width=True)
+
+
+            all_result =processed.groupby(['位置','项目总称','具体材料','项目特征'])['工程数量'].agg('sum').to_frame()
+
+            output = BytesIO()
+            all_result.to_excel(output)
+            st.download_button(
+                label="下载汇总数据",
+                data=output,
+                file_name='汇总.xlsx',          
+            )
+        except:
+            st.warning('文件格式不符，请检查后刷新页面重新上传', icon="⚠️")
