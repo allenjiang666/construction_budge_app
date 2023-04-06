@@ -24,7 +24,7 @@ else:
     _, middle, _ = st.columns([1,2, 1])
     with middle:
         with st.form('login_form'):
-            st.subheader('用户登陆')
+            st.subheader('亿鑫建筑预算系统')
             user = st.text_input('用户名')
             password = st.text_input('密码',type='password')
             login_btn= st.form_submit_button('登陆', type='primary')
