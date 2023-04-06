@@ -74,7 +74,7 @@ with processed_tab:
             result = processed.groupby([category])['工程数量'].agg('sum').to_frame()
             if category=='具体材料':
                 result = result[result.index !='无']
-                result.index =[i[:20] for i in  result.index]
+                result.index = [i[:20] for i in  result.index]
 
             col1, col2 = st.columns([3, 1])
             with col1:
