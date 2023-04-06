@@ -72,6 +72,8 @@ with processed_tab:
             processed[['项目总称','具体材料']] = processed['项目'].apply(split_material)
             processed['位置'] = processed['项目总称'].apply(split_location)
             result = processed.groupby([category])['工程数量'].agg('sum').to_frame()
+            if category=='具体材料':
+                result = result[result.index !='无']
 
             col1, col2 = st.columns([3, 1])
             with col1:
