@@ -74,13 +74,14 @@ with processed_tab:
             result = processed.groupby([category])['工程数量'].agg('sum').to_frame()
             if category=='具体材料':
                 result = result[result.index !='无']
-                result.index = [i[:20] for i in  result.index]
-                print(result.index)
+                result.index = [i[:14] for i in  result.index]
+                result.index.name='具体材料'
 
             col1, col2 = st.columns([3, 1])
             with col1:
                 fig = px.bar(result.reset_index(), x=category, y='工程数量')
-                fig.update_xaxes(tickangle=90)
+                # fig.update_xaxes(tickangle=60)
+                fig.update_layout(height=500)
                 st.plotly_chart(fig, use_container_width=True)
             with col2:
                 st.dataframe(result,height=500,use_container_width=True)
